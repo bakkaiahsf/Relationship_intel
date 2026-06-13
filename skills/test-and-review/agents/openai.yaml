@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test and Review"
+  short_description: "Run quality checks and review implementation risks"
+  default_prompt: "Test this repository, review the changes for production risks, and fix verified issues."

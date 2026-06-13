@@ -1,0 +1,4 @@
+interface:
+  display_name: "Supabase Builder"
+  short_description: "Create secure Supabase schemas, migrations, auth, and RLS"
+  default_prompt: "Implement the Supabase schema and security policies required by PRD.md."

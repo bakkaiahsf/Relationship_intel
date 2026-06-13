@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web App Builder"
+  short_description: "Build production-ready Next.js SaaS applications from a PRD"
+  default_prompt: "Build the web application described in PRD.md using the repository rules and architecture."

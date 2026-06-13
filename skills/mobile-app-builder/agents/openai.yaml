@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile App Builder"
+  short_description: "Build Expo React Native applications from a PRD"
+  default_prompt: "Build the mobile application described in PRD.md using Expo and the shared packages."

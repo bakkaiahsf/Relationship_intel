@@ -1,0 +1,2 @@
+-- Local-only seed data belongs here.
+-- Create auth users through the local auth flow so UUIDs match.
