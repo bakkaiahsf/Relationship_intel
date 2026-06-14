@@ -215,11 +215,7 @@ class SupabaseRestClient {
   async listAuthUsers() {
     const response = await this.request<{
       users: Array<{ id: string; email?: string; user_metadata?: JsonObject }>;
-    }>(
-      `/users?per_page=200`,
-      {},
-      true
-    );
+    }>(`/admin/users?per_page=200`, {}, true);
     return response.users;
   }
 
@@ -232,7 +228,7 @@ class SupabaseRestClient {
       email?: string;
       user_metadata?: JsonObject;
     }>(
-      "/users",
+      "/admin/users",
       {
         body: JSON.stringify({
           email: input.email,
