@@ -2,7 +2,9 @@ import { ArrowLeft, FileClock, MessageSquareText, ShieldCheck } from "lucide-rea
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader, Panel, RiskBadge, StatusBadge } from "../../../components/workspace-ui";
-import { alertRows, portfolioRows } from "../../../lib/mock-data";
+import { getWorkspaceData } from "../../../lib/rivr-db";
+
+export const dynamic = "force-dynamic";
 
 export default async function ExposureDetailPage({
   params
@@ -10,9 +12,11 @@ export default async function ExposureDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const exposure = portfolioRows.find((item) => item.id === id);
+  const { alerts, exposures } = await getWorkspaceData();
+  const exposure = exposures.find((item) => item.id === id);
   if (!exposure) notFound();
-  const alerts = alertRows.filter((item) => item.entityId === exposure.entityId);
+  const relatedAlerts = alerts.filter((item) => item.entityId === exposure.entityId);
+  const primaryAlert = relatedAlerts[0];
 
   return (
     <>
@@ -21,7 +25,19 @@ export default async function ExposureDetailPage({
         eyebrow="NCD monitoring cockpit"
         title={exposure.isin}
         description={`${exposure.issuer} · ${exposure.security} · Matures ${exposure.maturity}`}
-        actions={<button className="button" type="button">Record decision</button>}
+        actions={
+          primaryAlert ? (
+            <form action={`/api/alerts/${primaryAlert.id}/decisions`} method="post">
+              <input name="decision" type="hidden" value="watch" />
+              <input
+                name="notes"
+                type="hidden"
+                value="Exposure cockpit review recorded from the NCD detail view."
+              />
+              <button className="button" type="submit">Record decision</button>
+            </form>
+          ) : null
+        }
       />
       <section className="entity-summary">
         <div><span>Current risk</span><RiskBadge severity={exposure.risk} /></div>
@@ -50,7 +66,7 @@ export default async function ExposureDetailPage({
       </section>
       <Panel title="Risk events and alerts" description="Evidence-backed changes affecting this exposure">
         <div className="timeline">
-          {alerts.map((alert) => (
+          {relatedAlerts.map((alert) => (
             <article className="timeline-item" key={alert.id}>
               <span className={`timeline-dot dot-${alert.severity}`} />
               <div>

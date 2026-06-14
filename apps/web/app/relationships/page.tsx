@@ -1,23 +1,36 @@
 import { Download, Network, Search } from "lucide-react";
+import Link from "next/link";
 import { PageHeader, Panel, RiskBadge } from "../../components/workspace-ui";
-import { relationshipLinks } from "../../lib/mock-data";
+import { getWorkspaceData } from "../../lib/rivr-db";
 
 export const metadata = { title: "Relationship Intelligence" };
+export const dynamic = "force-dynamic";
 
-export default function RelationshipsPage() {
+export default async function RelationshipsPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ filter?: string }>;
+}) {
+  const params = searchParams ? await searchParams : {};
+  const { relationships } = await getWorkspaceData();
+  const filter = params.filter?.toLowerCase();
+  const filteredRelationships = filter
+    ? relationships.filter((relationship) => relationship.type.toLowerCase().includes(filter))
+    : relationships;
+
   return (
     <>
       <PageHeader
         eyebrow="Group and hidden concentration"
         title="Relationship intelligence"
         description="Trace common directors, ownership, shared addresses, and aggregated exposure with source confidence."
-        actions={<button className="button button-secondary" type="button"><Download size={15} /> Export network</button>}
+        actions={<Link className="button button-secondary" href="/api/exports/network"><Download size={15} /> Export network</Link>}
       />
       <div className="relationship-toolbar">
         <label><Search size={16} /><input aria-label="Search relationship network" defaultValue="Suryodaya Finance" /></label>
-        <button className="filter-button" type="button"><Network size={15} /> Director links</button>
-        <button className="filter-button" type="button">Ownership</button>
-        <button className="filter-button" type="button">Shared address</button>
+        <Link className={filter === "director" ? "filter-button active" : "filter-button"} href="/relationships?filter=director"><Network size={15} /> Director links</Link>
+        <Link className={filter === "ownership" ? "filter-button active" : "filter-button"} href="/relationships?filter=ownership">Ownership</Link>
+        <Link className={filter === "shared" ? "filter-button active" : "filter-button"} href="/relationships?filter=shared">Shared address</Link>
       </div>
 
       <section className="relationship-layout">
@@ -80,7 +93,7 @@ export default function RelationshipsPage() {
           <table>
             <thead><tr><th>Source</th><th>Related entity</th><th>Relationship</th><th>Confidence</th><th>Linked exposure</th></tr></thead>
             <tbody>
-              {relationshipLinks.map((link) => (
+              {filteredRelationships.map((link) => (
                 <tr key={`${link.source}-${link.target}`}>
                   <td>{link.source}</td>
                   <td>{link.target}</td>

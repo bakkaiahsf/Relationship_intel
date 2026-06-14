@@ -30,12 +30,14 @@ AI summaries, WhatsApp delivery, relationship graphs, advanced reports, and bill
 - [x] Add typed sample data and cross-screen data-contract tests.
 - [x] Add responsive navigation, dense tables, risk states, and accessible table fallbacks.
 - [x] Add a guided demo walkthrough page.
+- [x] Connect the core demo views to live Supabase reads and writes for portfolio import, counterparty creation, alert actions, evidence snapshots, and CSV exports.
+- [x] Make the dashboard, portfolio, alerts, entities, NCD exposures, and relationship screens render dynamically from the remote schema.
 
 ### Connectivity Follow-Up
 
-- [ ] Review and apply the RIVR migration to the linked non-production Supabase project.
-- [ ] Confirm `schemaReady: true` through the protected health route.
-- [ ] Add OpenAI and job-token variables to a correctly scoped Vercel Preview environment.
+- [x] Review and apply the RIVR migration to the linked non-production Supabase project.
+- [x] Confirm `schemaReady: true` through the protected health route.
+- [x] Add OpenAI and job-token variables to a correctly scoped Vercel Preview environment.
 - [ ] Add Razorpay test credentials only when a payment workflow is approved.
 - [ ] Keep all optional providers set to `mock` until their milestone begins.
 

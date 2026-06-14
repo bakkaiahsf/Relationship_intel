@@ -1,11 +1,23 @@
 import { SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 import { FilterBar, PageHeader, Panel, RiskBadge, StatusBadge } from "../../components/workspace-ui";
-import { alertRows } from "../../lib/mock-data";
+import { getWorkspaceData } from "../../lib/rivr-db";
 
 export const metadata = { title: "Alerts" };
+export const dynamic = "force-dynamic";
 
-export default function AlertsPage() {
+export default async function AlertsPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ status?: string }>;
+}) {
+  const { alerts } = await getWorkspaceData();
+  const params = searchParams ? await searchParams : {};
+  const statusFilter = params.status?.toLowerCase();
+  const filteredAlerts = statusFilter
+    ? alerts.filter((alert) => alert.status.toLowerCase() === statusFilter)
+    : alerts;
+
   return (
     <>
       <PageHeader
@@ -15,10 +27,10 @@ export default function AlertsPage() {
         actions={<button className="button" type="button">Create saved view</button>}
       />
       <div className="queue-tabs" role="tablist" aria-label="Alert views">
-        <button className="active" role="tab" type="button">Open <span>24</span></button>
-        <button role="tab" type="button">Assigned to me <span>7</span></button>
-        <button role="tab" type="button">Beyond SLA <span>7</span></button>
-        <button role="tab" type="button">Closed</button>
+        <Link className={!statusFilter ? "active" : ""} href="/alerts" role="tab">Open <span>{alerts.filter((alert) => alert.status !== "Closed").length}</span></Link>
+        <Link className={statusFilter === "assigned" ? "active" : ""} href="/alerts?status=assigned" role="tab">Assigned to me <span>{alerts.filter((alert) => alert.owner === "Ananya Rao").length}</span></Link>
+        <Link className={statusFilter === "escalated" ? "active" : ""} href="/alerts?status=escalated" role="tab">Beyond SLA <span>{alerts.filter((alert) => alert.status === "Escalated").length}</span></Link>
+        <Link className={statusFilter === "closed" ? "active" : ""} href="/alerts?status=closed" role="tab">Closed</Link>
       </div>
       <Panel title="Priority queue" description="Sorted by severity, exposure, age, and SLA">
         <FilterBar searchPlaceholder="Search alerts or counterparties">
@@ -30,7 +42,7 @@ export default function AlertsPage() {
               <tr><th>Severity</th><th>Alert</th><th>Counterparty</th><th>Exposure</th><th>Source</th><th>Age</th><th>Owner</th><th>Status</th></tr>
             </thead>
             <tbody>
-              {alertRows.map((alert) => (
+              {filteredAlerts.map((alert) => (
                 <tr key={alert.id}>
                   <td><RiskBadge severity={alert.severity} /></td>
                   <td>

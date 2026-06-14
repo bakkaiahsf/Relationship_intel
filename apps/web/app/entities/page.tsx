@@ -1,18 +1,21 @@
 import { Building2, SlidersHorizontal, UserRoundCheck } from "lucide-react";
 import Link from "next/link";
 import { FilterBar, PageHeader, Panel, RiskBadge } from "../../components/workspace-ui";
-import { counterparties } from "../../lib/mock-data";
+import { getWorkspaceData } from "../../lib/rivr-db";
 
 export const metadata = { title: "Counterparties" };
+export const dynamic = "force-dynamic";
 
-export default function EntitiesPage() {
+export default async function EntitiesPage() {
+  const { counterparties } = await getWorkspaceData();
+
   return (
     <>
       <PageHeader
         eyebrow="Business identity"
         title="Counterparties"
         description="Verified issuers, borrowers, guarantors, trustees, vendors, and related parties."
-        actions={<button className="button" type="button"><Building2 size={15} /> Add counterparty</button>}
+        actions={<Link className="button" href="/entities/new"><Building2 size={15} /> Add counterparty</Link>}
       />
       <Panel title="Entity register" description="Identity, exposure, verification coverage, and risk">
         <FilterBar searchPlaceholder="Search legal name, GSTIN or CIN">

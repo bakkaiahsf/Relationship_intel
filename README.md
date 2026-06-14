@@ -44,19 +44,20 @@ Run the full quality gate with `npm run check`.
 
 ## Core workspace screens
 
-- `/`: portfolio risk dashboard with exposure, maturity, high-risk, and alert summaries
-- `/portfolio`: NCD portfolio register and CSV import entry point
+- `/`: portfolio risk dashboard with live Supabase-backed exposure, maturity, high-risk, and alert summaries
+- `/portfolio`: NCD portfolio register, CSV import entry point, and export action
 - `/entities`: counterparty register with issuer verification and risk status
+- `/entities/new`: counterparty creation form
 - `/entities/[id]`: counterparty evidence, identifiers, exposure, events, and alerts
-- `/ncd-exposures`: NCD exposure register
+- `/ncd-exposures`: NCD exposure register and export action
 - `/ncd-exposures/[id]`: NCD monitoring cockpit for terms, security, covenants, and decisions
-- `/alerts`: analyst alert work queue
-- `/alerts/[id]`: alert evidence, timeline, and decision view
-- `/relationships`: related-party graph prototype with an accessible table fallback
+- `/alerts`: analyst alert work queue with status tabs
+- `/alerts/[id]`: alert evidence, timeline, and decision view with assignment and acknowledgement actions
+- `/relationships`: related-party graph prototype with filter chips and an export action
 - `/reports` and `/settings`: reporting and workspace configuration foundations
 - `/demo`: guided walkthrough for live demos
 
-The screens currently use typed sample data in `apps/web/lib/mock-data.ts`. Backend API and Supabase integration remain tracked in `docs/TASKS.md`.
+The screens are seeded from typed demo data in `apps/web/lib/mock-data.ts` and now read/write against the connected Supabase schema for the core demo flow. Remaining backlog items stay tracked in `docs/TASKS.md`.
 
 ## Product documents
 
@@ -77,8 +78,8 @@ The screens currently use typed sample data in `apps/web/lib/mock-data.ts`. Back
 
 - Vercel project: `bakkaiahs-projects/relationship-intel-web`.
 - Supabase API: connected.
-- RIVR Supabase schema: migration prepared; remote application requires Supabase CLI access or a non-pooling database credential.
+- RIVR Supabase schema: applied to the remote Supabase project and validated through the protected health route.
 - OpenAI: connected with the configured model.
 - KYB, email, WhatsApp, and payments: mock providers.
 - Razorpay: test key placeholders exist, but local test credentials are not currently configured.
-- Vercel Preview AI/job variables: pending correctly scoped Preview environment setup; Production is unchanged.
+- Vercel Preview AI/job variables: configured for the current project scope.

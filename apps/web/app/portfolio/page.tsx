@@ -1,11 +1,20 @@
 import { Download, SlidersHorizontal, Upload } from "lucide-react";
 import Link from "next/link";
 import { FilterBar, PageHeader, Panel, RiskBadge } from "../../components/workspace-ui";
-import { portfolioRows } from "../../lib/mock-data";
+import { getWorkspaceData } from "../../lib/rivr-db";
 
 export const metadata = { title: "Portfolio" };
+export const dynamic = "force-dynamic";
 
-export default function PortfolioPage() {
+export default async function PortfolioPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ import?: string }>;
+}) {
+  const params = searchParams ? await searchParams : {};
+  const { exposures } = await getWorkspaceData();
+  const showImportForm = params.import === "true";
+
   return (
     <>
       <PageHeader
@@ -14,12 +23,12 @@ export default function PortfolioPage() {
         description="Monitor issuer exposure, maturity, security, rating, and current evidence-backed risk."
         actions={
           <>
-            <button className="button button-secondary" type="button">
+            <Link className="button button-secondary" href="/api/exports/portfolio">
               <Download aria-hidden="true" size={15} /> Export
-            </button>
-            <button className="button" type="button">
+            </Link>
+            <Link className="button" href="?import=true">
               <Upload aria-hidden="true" size={15} /> Import CSV
-            </button>
+            </Link>
           </>
         }
       />
@@ -30,6 +39,28 @@ export default function PortfolioPage() {
         <div><span>Critical / high</span><strong>₹64.5 Cr</strong></div>
         <div><span>Due in 12 months</span><strong>₹28.5 Cr</strong></div>
       </div>
+
+      {showImportForm ? (
+        <Panel title="Portfolio import" description="Upload a CSV to create counterparties and exposures">
+          <form action="/api/imports/portfolio" encType="multipart/form-data" method="post" className="import-form">
+            <label className="form-field">
+              <span>CSV file</span>
+              <input accept=".csv,text/csv" name="file" type="file" />
+            </label>
+            <label className="form-field">
+              <span>Sample format</span>
+              <textarea
+                defaultValue="issuer,isin,outstanding,maturity,rating,security,sector\nSuryodaya Finance Limited,INE982X07124,36.0,14 Feb 2027,BBB- / Negative,Secured,NBFC"
+                name="sample"
+                readOnly
+              />
+            </label>
+            <button className="button" type="submit">
+              Upload and validate
+            </button>
+          </form>
+        </Panel>
+      ) : null}
 
       <section className="detail-grid">
         <Panel title="Demo import flow" description="The upload path to show during a live walkthrough">
@@ -74,7 +105,7 @@ export default function PortfolioPage() {
         </Panel>
       </section>
 
-      <Panel title="Exposure register" description="Sample data until portfolio APIs are connected">
+      <Panel title="Exposure register" description="Live data from Supabase">
         <FilterBar searchPlaceholder="Search issuer or ISIN">
           <button className="filter-button" type="button">
             <SlidersHorizontal aria-hidden="true" size={15} /> Filters
@@ -102,7 +133,7 @@ export default function PortfolioPage() {
               </tr>
             </thead>
             <tbody>
-              {portfolioRows.map((row) => (
+              {exposures.map((row) => (
                 <tr key={row.id}>
                   <td>
                     <Link className="entity-link" href={`/ncd-exposures/${row.id}`}>

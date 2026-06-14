@@ -1,18 +1,21 @@
 import { Download, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 import { FilterBar, PageHeader, Panel, RiskBadge } from "../../components/workspace-ui";
-import { portfolioRows } from "../../lib/mock-data";
+import { getWorkspaceData } from "../../lib/rivr-db";
 
 export const metadata = { title: "NCD Exposures" };
+export const dynamic = "force-dynamic";
 
-export default function ExposuresPage() {
+export default async function ExposuresPage() {
+  const { exposures } = await getWorkspaceData();
+
   return (
     <>
       <PageHeader
         eyebrow="Instrument monitoring"
         title="NCD exposures"
         description="Terms, maturity, rating, security position, and issuer risk across monitored instruments."
-        actions={<button className="button button-secondary" type="button"><Download size={15} /> Export register</button>}
+        actions={<Link className="button button-secondary" href="/api/exports/portfolio"><Download size={15} /> Export register</Link>}
       />
       <Panel title="Instrument register" description="All monitored NCD positions">
         <FilterBar searchPlaceholder="Search ISIN or issuer">
@@ -24,7 +27,7 @@ export default function ExposuresPage() {
               <tr><th>ISIN</th><th>Issuer</th><th>Outstanding</th><th>Coupon</th><th>Maturity</th><th>Rating</th><th>Security</th><th>Risk</th></tr>
             </thead>
             <tbody>
-              {portfolioRows.map((row, index) => (
+              {exposures.map((row, index) => (
                 <tr key={row.id}>
                   <td><Link className="entity-link identifier" href={`/ncd-exposures/${row.id}`}>{row.isin}</Link></td>
                   <td>{row.issuer}</td>

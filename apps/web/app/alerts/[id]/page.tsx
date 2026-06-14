@@ -2,7 +2,10 @@ import { ArrowLeft, FileCheck2, Flag, MessageSquareText, UserRoundPlus } from "l
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader, Panel, RiskBadge, StatusBadge } from "../../../components/workspace-ui";
-import { alertRows, alertTimeline, counterparties, portfolioRows } from "../../../lib/mock-data";
+import { alertTimeline } from "../../../lib/mock-data";
+import { getWorkspaceData } from "../../../lib/rivr-db";
+
+export const dynamic = "force-dynamic";
 
 export default async function AlertDetailPage({
   params
@@ -10,11 +13,12 @@ export default async function AlertDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const alert = alertRows.find((item) => item.id === id);
+  const { alerts, counterparties, exposures } = await getWorkspaceData();
+  const alert = alerts.find((item) => item.id === id);
   if (!alert) notFound();
 
   const counterparty = counterparties.find((item) => item.id === alert.entityId);
-  const exposure = portfolioRows.find((item) => item.entityId === alert.entityId);
+  const exposure = exposures.find((item) => item.entityId === alert.entityId);
 
   return (
     <>
@@ -27,15 +31,27 @@ export default async function AlertDetailPage({
         description={`${alert.counterparty} · ${alert.id} · Source ${alert.source}`}
         actions={
           <>
-            <button className="button button-secondary" type="button">
-              <UserRoundPlus aria-hidden="true" size={15} /> Assign
-            </button>
-            <button className="button button-secondary" type="button">
-              <FileCheck2 aria-hidden="true" size={15} /> Acknowledge
-            </button>
-            <button className="button" type="button">
-              <Flag aria-hidden="true" size={15} /> Record decision
-            </button>
+            <form action={`/api/alerts/${alert.id}/assign`} method="post">
+              <button className="button button-secondary" type="submit">
+                <UserRoundPlus aria-hidden="true" size={15} /> Assign
+              </button>
+            </form>
+            <form action={`/api/alerts/${alert.id}/acknowledge`} method="post">
+              <button className="button button-secondary" type="submit">
+                <FileCheck2 aria-hidden="true" size={15} /> Acknowledge
+              </button>
+            </form>
+            <form action={`/api/alerts/${alert.id}/decisions`} method="post">
+              <input
+                name="decision"
+                type="hidden"
+                value={alert.severity === "critical" ? "committee_escalation" : "watch"}
+              />
+              <input name="notes" type="hidden" value="Decision recorded from alert detail view." />
+              <button className="button" type="submit">
+                <Flag aria-hidden="true" size={15} /> Record decision
+              </button>
+            </form>
           </>
         }
       />

@@ -280,6 +280,10 @@ kbd {
   gap: 10px;
 }
 
+.topbar-actions a {
+  text-decoration: none;
+}
+
 .icon-button {
   position: relative;
   display: inline-flex;
@@ -370,6 +374,10 @@ kbd {
   gap: 8px;
 }
 
+.page-actions form {
+  display: inline-flex;
+}
+
 .button,
 .filter-button {
   display: inline-flex;
@@ -402,6 +410,12 @@ kbd {
 .button-secondary:hover,
 .filter-button:hover {
   background: var(--surface-muted);
+}
+
+.filter-button.active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-soft);
 }
 
 .metric-grid {
@@ -1055,6 +1069,7 @@ tbody tr:hover {
   overflow-x: auto;
 }
 
+.queue-tabs a,
 .queue-tabs button {
   display: inline-flex;
   min-height: 34px;
@@ -1071,6 +1086,11 @@ tbody tr:hover {
   cursor: pointer;
 }
 
+.queue-tabs a {
+  text-decoration: none;
+}
+
+.queue-tabs a.active,
 .queue-tabs button.active {
   border-color: var(--primary);
   color: var(--primary);
@@ -1082,6 +1102,39 @@ tbody tr:hover {
   border-radius: 999px;
   background: var(--surface-strong);
   font-size: 9px;
+}
+
+.import-form {
+  display: grid;
+  gap: 12px;
+}
+
+.form-field {
+  display: grid;
+  gap: 6px;
+}
+
+.form-field span {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  background: #ffffff;
+  font: inherit;
+}
+
+.form-field textarea {
+  min-height: 96px;
+  resize: vertical;
 }
 
 .relationship-toolbar {

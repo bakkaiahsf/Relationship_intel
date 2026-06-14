@@ -2,7 +2,9 @@ import { ArrowLeft, Building2, CalendarClock, FileCheck2, Network } from "lucide
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader, Panel, RiskBadge, StatusBadge } from "../../../components/workspace-ui";
-import { alertRows, counterparties, portfolioRows } from "../../../lib/mock-data";
+import { getEvidenceSnapshotsForCounterparty, getWorkspaceData } from "../../../lib/rivr-db";
+
+export const dynamic = "force-dynamic";
 
 export default async function EntityDetailPage({
   params
@@ -10,11 +12,13 @@ export default async function EntityDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const { counterparties, alerts, exposures } = await getWorkspaceData();
   const entity = counterparties.find((item) => item.id === id);
   if (!entity) notFound();
 
-  const exposures = portfolioRows.filter((item) => item.entityId === id);
-  const alerts = alertRows.filter((item) => item.entityId === id);
+  const snapshots = await getEvidenceSnapshotsForCounterparty(id);
+  const entityExposures = exposures.filter((item) => item.entityId === id);
+  const entityAlerts = alerts.filter((item) => item.entityId === id);
 
   return (
     <>
@@ -27,8 +31,13 @@ export default async function EntityDetailPage({
         description={`${entity.cin} · ${entity.sector} · Evidence refreshed today`}
         actions={
           <>
-            <button className="button button-secondary" type="button">Request verification</button>
-            <button className="button" type="button">Add to watchlist</button>
+            <form action="/api/verifications/mca" method="post">
+              <input name="counterpartyId" type="hidden" value={entity.id} />
+              <button className="button button-secondary" type="submit">Request verification</button>
+            </form>
+            <form action={`/api/counterparties/${entity.id}/watchlist`} method="post">
+              <button className="button" type="submit">Add to watchlist</button>
+            </form>
           </>
         }
       />
@@ -69,7 +78,7 @@ export default async function EntityDetailPage({
           <table>
             <thead><tr><th>ISIN</th><th>Outstanding</th><th>Maturity</th><th>Security</th><th>Risk</th></tr></thead>
             <tbody>
-              {exposures.map((exposure) => (
+              {entityExposures.map((exposure) => (
                 <tr key={exposure.id}>
                   <td><Link className="entity-link" href={`/ncd-exposures/${exposure.id}`}>{exposure.isin}</Link></td>
                   <td className="numeric">{exposure.outstanding}</td>
@@ -85,19 +94,26 @@ export default async function EntityDetailPage({
 
       <Panel title="Evidence snapshots" description="Normalized facts from the latest provider responses">
         <div className="coverage-list">
-          <div><FileCheck2 size={17} /><span><strong>GST</strong><small>Active registration, legal name, and filing history refreshed today.</small></span><StatusBadge status="Current" /></div>
-          <div><Building2 size={17} /><span><strong>MCA</strong><small>Company master, directors, and charges refreshed today.</small></span><StatusBadge status="Current" /></div>
-          <div><Network size={17} /><span><strong>PAN / Udyam</strong><small>Name match and MSME classification captured in evidence storage.</small></span><StatusBadge status="Verified" /></div>
+          {snapshots.slice(0, 3).map((snapshot) => (
+            <div key={snapshot.id}>
+              <FileCheck2 size={17} />
+              <span>
+                <strong>{snapshot.source.toUpperCase()}</strong>
+                <small>Fetched {new Date(snapshot.fetched_at).toLocaleString("en-IN")}</small>
+              </span>
+              <StatusBadge status="Current" />
+            </div>
+          ))}
         </div>
       </Panel>
 
       <Panel title="Open alerts" description="Events and rule outputs requiring action">
-        {alerts.length ? (
+        {entityAlerts.length ? (
           <div className="table-wrap">
             <table>
               <thead><tr><th>Severity</th><th>Trigger</th><th>Source</th><th>Owner</th><th>Status</th></tr></thead>
               <tbody>
-                {alerts.map((alert) => (
+                {entityAlerts.map((alert) => (
                   <tr key={alert.id}>
                     <td><RiskBadge severity={alert.severity} /></td>
                     <td>{alert.trigger}</td>

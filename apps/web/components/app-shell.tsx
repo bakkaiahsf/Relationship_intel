@@ -101,18 +101,18 @@ export function AppShell({ children }: { children: ReactNode }) {
             <kbd>⌘ K</kbd>
           </label>
           <div className="topbar-actions">
-            <button aria-label="Notifications" className="icon-button" type="button">
+            <Link aria-label="Notifications" className="icon-button" href="/alerts">
               <Bell aria-hidden="true" size={18} />
               <span className="notification-dot" />
-            </button>
-            <button className="user-menu" type="button">
+            </Link>
+            <Link className="user-menu" href="/settings">
               <span className="avatar">BK</span>
               <span className="user-copy">
                 <strong>B. Kumar</strong>
                 <small>Credit manager</small>
               </span>
               <ChevronDown aria-hidden="true" size={14} />
-            </button>
+            </Link>
           </div>
         </header>
         <main className="content">{children}</main>
