@@ -223,23 +223,38 @@ class SupabaseRestClient {
     email: string;
     fullName: string;
   }) {
-    return this.request<{
-      id: string;
-      email?: string;
-      user_metadata?: JsonObject;
-    }>(
-      "/admin/users",
-      {
-        body: JSON.stringify({
-          email: input.email,
-          email_confirm: true,
-          password: `demo-${slugify(input.email)}-123!`,
-          user_metadata: { full_name: input.fullName }
-        }),
-        method: "POST"
-      },
-      true
-    );
+    try {
+      return await this.request<{
+        id: string;
+        email?: string;
+        user_metadata?: JsonObject;
+      }>(
+        "/admin/users",
+        {
+          body: JSON.stringify({
+            email: input.email,
+            email_confirm: true,
+            password: `demo-${slugify(input.email)}-123!`,
+            user_metadata: { full_name: input.fullName }
+          }),
+          method: "POST"
+        },
+        true
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      if (!message.includes("email_exists")) {
+        throw error;
+      }
+
+      const users = await this.listAuthUsers();
+      const existing = users.find((user) => user.email === input.email);
+      if (!existing) {
+        throw error;
+      }
+
+      return existing;
+    }
   }
 }
 
