@@ -461,7 +461,7 @@ async function seedEvidenceAndAlerts(
 ) {
   const existingAlerts = await client.select<DemoAlertRow>(
     "alerts",
-    "id,title,status,organization_id,metadata,alert_rule_id,rule_version",
+    "id,title,status,organization_id,alert_rule_id,rule_version",
     `organization_id=eq.${organizationId}`
   );
   if (existingAlerts.length > 0) {
