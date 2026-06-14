@@ -316,3 +316,82 @@ export const relationshipLinks = [
     exposure: "₹18.6 Cr"
   }
 ] as const;
+
+export const demoChecklist = [
+  {
+    route: "/portfolio",
+    status: "Ready",
+    step: "Upload NCD portfolio",
+    summary: "Use the import entry point to show file validation and portfolio load."
+  },
+  {
+    route: "/entities/suryodaya-finance",
+    status: "Ready",
+    step: "Verify issuer",
+    summary: "Open counterparty evidence, identifiers, and current verification coverage."
+  },
+  {
+    route: "/ncd-exposures/exp-001",
+    status: "Ready",
+    step: "Review exposure cockpit",
+    summary: "Show terms, covenant checks, and alert-linked history."
+  },
+  {
+    route: "/alerts/ALT-2048",
+    status: "Ready",
+    step: "Record analyst decision",
+    summary: "Walk through assignment, acknowledgement, and decision notes."
+  }
+] as const;
+
+export const alertTimeline = [
+  {
+    when: "08:15",
+    title: "Rating moved to default",
+    detail: "The latest rating feed downgraded the issuer to default and triggered a critical alert.",
+    tone: "critical" as const
+  },
+  {
+    when: "08:17",
+    title: "Evidence snapshot stored",
+    detail: "A normalized snapshot of the provider response was stored for audit and change detection.",
+    tone: "neutral" as const
+  },
+  {
+    when: "08:21",
+    title: "Analyst assigned",
+    detail: "Ananya Rao acknowledged the alert and linked the exposure to the active investigation queue.",
+    tone: "high" as const
+  },
+  {
+    when: "08:35",
+    title: "Decision drafted",
+    detail: "The credit manager prepared a freeze recommendation and committee note for review.",
+    tone: "medium" as const
+  }
+] as const;
+
+export const exposureTimeline = [
+  {
+    when: "Today",
+    title: "Quarterly covenant checked",
+    detail: "Security cover and DSRA status are current."
+  },
+  {
+    when: "2 days ago",
+    title: "MCA charge update",
+    detail: "A new material charge was reflected in the evidence trail."
+  },
+  {
+    when: "5 days ago",
+    title: "GST filing delay",
+    detail: "Repeated filing delays were carried into the risk model."
+  }
+] as const;
+
+export const demoStats = [
+  { label: "Workflow steps", value: "4", note: "Ready to click through" },
+  { label: "Demo objects", value: "12", note: "Counterparties, exposures, alerts" },
+  { label: "Deployment", value: "Live", note: "Production deployment is ready" },
+  { label: "Walkthrough", value: "Ready", note: "Use the guided demo flow" }
+] as const;

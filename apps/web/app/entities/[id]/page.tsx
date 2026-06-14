@@ -83,6 +83,14 @@ export default async function EntityDetailPage({
         </div>
       </Panel>
 
+      <Panel title="Evidence snapshots" description="Normalized facts from the latest provider responses">
+        <div className="coverage-list">
+          <div><FileCheck2 size={17} /><span><strong>GST</strong><small>Active registration, legal name, and filing history refreshed today.</small></span><StatusBadge status="Current" /></div>
+          <div><Building2 size={17} /><span><strong>MCA</strong><small>Company master, directors, and charges refreshed today.</small></span><StatusBadge status="Current" /></div>
+          <div><Network size={17} /><span><strong>PAN / Udyam</strong><small>Name match and MSME classification captured in evidence storage.</small></span><StatusBadge status="Verified" /></div>
+        </div>
+      </Panel>
+
       <Panel title="Open alerts" description="Events and rule outputs requiring action">
         {alerts.length ? (
           <div className="table-wrap">

@@ -51,8 +51,10 @@ Run the full quality gate with `npm run check`.
 - `/ncd-exposures`: NCD exposure register
 - `/ncd-exposures/[id]`: NCD monitoring cockpit for terms, security, covenants, and decisions
 - `/alerts`: analyst alert work queue
+- `/alerts/[id]`: alert evidence, timeline, and decision view
 - `/relationships`: related-party graph prototype with an accessible table fallback
 - `/reports` and `/settings`: reporting and workspace configuration foundations
+- `/demo`: guided walkthrough for live demos
 
 The screens currently use typed sample data in `apps/web/lib/mock-data.ts`. Backend API and Supabase integration remain tracked in `docs/TASKS.md`.
 

@@ -1,4 +1,4 @@
-import { ArrowLeft, FileClock, ShieldCheck } from "lucide-react";
+import { ArrowLeft, FileClock, MessageSquareText, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader, Panel, RiskBadge, StatusBadge } from "../../../components/workspace-ui";
@@ -60,6 +60,27 @@ export default async function ExposureDetailPage({
               </div>
             </article>
           ))}
+        </div>
+      </Panel>
+
+      <Panel title="Decision log" description="What the credit team records after investigation">
+        <div className="coverage-list">
+          <div>
+            <MessageSquareText aria-hidden="true" size={17} />
+            <span>
+              <strong>Analyst note</strong>
+              <small>Open issue: determine whether the latest charge materially impacts coverage.</small>
+            </span>
+            <StatusBadge status="Draft" />
+          </div>
+          <div>
+            <FileClock aria-hidden="true" size={17} />
+            <span>
+              <strong>Committee memo</strong>
+              <small>Ready for export once alert is resolved.</small>
+            </span>
+            <StatusBadge status="Pending" />
+          </div>
         </div>
       </Panel>
     </>

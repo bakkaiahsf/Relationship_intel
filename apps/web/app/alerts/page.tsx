@@ -33,7 +33,12 @@ export default function AlertsPage() {
               {alertRows.map((alert) => (
                 <tr key={alert.id}>
                   <td><RiskBadge severity={alert.severity} /></td>
-                  <td><Link className="entity-link" href={`/entities/${alert.entityId}`}>{alert.trigger}</Link><span className="cell-subtext">{alert.id}</span></td>
+                  <td>
+                    <Link className="entity-link" href={`/alerts/${alert.id}`}>
+                      {alert.trigger}
+                    </Link>
+                    <span className="cell-subtext">{alert.id}</span>
+                  </td>
                   <td>{alert.counterparty}<span className="cell-subtext">{alert.isin}</span></td>
                   <td className="numeric">{alert.exposure}</td>
                   <td>{alert.source}</td>

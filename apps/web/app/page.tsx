@@ -39,6 +39,19 @@ export default function DashboardPage() {
         ))}
       </section>
 
+      <Panel
+        title="Demo walkthrough"
+        description="Use the guided route when presenting the product live"
+        action={<Link href="/demo">Open demo flow</Link>}
+      >
+        <div className="summary-strip">
+          <div><span>1. Portfolio</span><strong>Import and validate</strong></div>
+          <div><span>2. Entity</span><strong>Verify issuer evidence</strong></div>
+          <div><span>3. Exposure</span><strong>Review covenants and terms</strong></div>
+          <div><span>4. Alert</span><strong>Record decision trail</strong></div>
+        </div>
+      </Panel>
+
       <section className="dashboard-grid">
         <Panel
           title="Exposure by maturity"

@@ -8,6 +8,7 @@ import {
   FileBarChart,
   Landmark,
   Network,
+  Play,
   Search,
   Settings,
   ShieldCheck,
@@ -19,6 +20,7 @@ import type { ReactNode } from "react";
 
 const navigation = [
   { href: "/", icon: CircleGauge, label: "Dashboard" },
+  { href: "/demo", icon: Play, label: "Demo flow" },
   { href: "/portfolio", icon: WalletCards, label: "Portfolio" },
   { href: "/entities", icon: Building2, label: "Counterparties" },
   { href: "/ncd-exposures", icon: Landmark, label: "NCD exposures" },

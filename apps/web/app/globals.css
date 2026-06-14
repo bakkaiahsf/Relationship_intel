@@ -716,9 +716,28 @@ tbody tr:hover {
 .status-current,
 .status-monitored,
 .status-compliant,
-.status-connected {
+.status-connected,
+.status-ready,
+.status-queued,
+.status-trackable,
+.status-required,
+.status-draft,
+.status-pending {
   color: var(--low);
   background: var(--low-soft);
+}
+
+.status-trackable,
+.status-pending {
+  color: var(--medium);
+  background: var(--medium-soft);
+}
+
+.status-required,
+.status-draft,
+.status-queued {
+  color: var(--high);
+  background: #fff0d9;
 }
 
 .summary-strip,
@@ -868,6 +887,90 @@ tbody tr:hover {
   font-size: 9px;
 }
 
+.demo-steps {
+  display: grid;
+}
+
+.demo-steps.compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.demo-step {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
+}
+
+.demo-step:last-child {
+  border-bottom: 0;
+}
+
+.demo-step:hover {
+  background: #f7faf9;
+}
+
+.demo-step-number {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: var(--primary);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.demo-step-copy strong,
+.demo-step-copy small {
+  display: block;
+}
+
+.demo-step-copy strong {
+  font-size: 11px;
+}
+
+.demo-step-copy small {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.talk-track {
+  display: grid;
+  gap: 10px;
+  padding: 8px 18px 18px;
+}
+
+.talk-track > div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  padding: 12px 12px 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.talk-track > div:last-child {
+  border-bottom: 0;
+}
+
+.talk-track svg {
+  color: var(--primary);
+}
+
+.talk-track p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .empty-state {
   padding: 28px;
   color: var(--text-muted);
@@ -919,6 +1022,7 @@ tbody tr:hover {
 .dot-high { background: var(--high); }
 .dot-medium { background: var(--medium); }
 .dot-low { background: var(--low); }
+.dot-neutral { background: var(--surface-strong); }
 
 .timeline-heading {
   display: flex;
@@ -936,6 +1040,12 @@ tbody tr:hover {
 .timeline-item small {
   color: var(--text-soft);
   font-size: 9px;
+}
+
+.timeline-heading span {
+  color: var(--text-soft);
+  font-size: 9px;
+  font-weight: 650;
 }
 
 .queue-tabs {
@@ -1125,6 +1235,10 @@ tbody tr:hover {
   .dashboard-grid,
   .detail-grid,
   .relationship-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-steps.compact {
     grid-template-columns: 1fr;
   }
 

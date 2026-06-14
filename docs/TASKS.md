@@ -29,6 +29,7 @@ AI summaries, WhatsApp delivery, relationship graphs, advanced reports, and bill
 - [x] Add dashboard, portfolio, counterparty, NCD, alert, relationship, report, and settings screen prototypes.
 - [x] Add typed sample data and cross-screen data-contract tests.
 - [x] Add responsive navigation, dense tables, risk states, and accessible table fallbacks.
+- [x] Add a guided demo walkthrough page.
 
 ### Connectivity Follow-Up
 
@@ -365,9 +366,9 @@ AI summaries, WhatsApp delivery, relationship graphs, advanced reports, and bill
 
 - [x] Build alert work queue prototype.
 - [x] Add severity, status, owner, age, exposure, and source columns and filter entry point.
-- [ ] Add alert detail timeline.
-- [ ] Show triggering rule and version.
-- [ ] Show before/after facts and evidence link.
+- [x] Add alert detail timeline.
+- [x] Show triggering rule and version.
+- [x] Show before/after facts and evidence link.
 - [ ] Add assign, acknowledge, escalate, close, and decision actions.
 - [ ] Add accessible loading, empty, error, and confirmation states.
 
@@ -404,7 +405,7 @@ AI summaries, WhatsApp delivery, relationship graphs, advanced reports, and bill
 - [x] Add maturity buckets using typed sample data.
 - [x] Add high-risk counterparties table using typed sample data.
 - [x] Add recent and aging alerts using typed sample data.
-- [ ] Add missing/stale verification queue.
+- [x] Add missing/stale verification queue prototype.
 - [ ] Add filter state and responsive dense-table behavior.
 - [ ] Add loading, empty, partial-data, and error states.
 
@@ -457,6 +458,7 @@ AI summaries, WhatsApp delivery, relationship graphs, advanced reports, and bill
 - [ ] Close or escalate the alert.
 - [ ] Confirm dashboard exposure and alert metrics update.
 - [ ] Confirm audit history contains the complete workflow.
+- [ ] Confirm demo hub walks through the workflow in order.
 - [ ] Run lint, typecheck, unit tests, API tests, RLS tests, and build.
 - [ ] Verify the workflow in a Vercel preview using mock data.
 
