@@ -622,7 +622,13 @@ async function seedEvidenceAndAlerts(
     }
   });
 
-  await client.insert("alerts", alertsToSeed);
+  const createdAlerts = await client.insert<{ id: string }>("alerts", alertsToSeed);
+  demoAlertRows.forEach((alert, index) => {
+    const created = createdAlerts[index];
+    if (created) {
+      alertsByDemoId.set(alert.id, created);
+    }
+  });
 
   await client.insert(
     "alert_decisions",
