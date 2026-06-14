@@ -12,5 +12,16 @@ coverage/
 !.env.example
 npm-debug.log*
 *.md
+!/README.md
+!/PRD.md
+!/RULES.md
+!/docs/API_CONTRACTS.md
+!/docs/ARCHITECTURE.md
+!/docs/INTEGRATION_RUNBOOK.md
+!/docs/NCD_MVP_PLAN.md
+!/docs/TASKS.md
 .github/workflows/*.yml
 .playwright-mcp/
+.vercel
+supabase/.branches/
+supabase/.temp/

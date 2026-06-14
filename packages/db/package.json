@@ -5,5 +5,8 @@
   "type": "module",
   "exports": { ".": "./src/index.ts" },
   "devDependencies": { "typescript": "^5.9.0" },
-  "scripts": { "typecheck": "tsc --noEmit" }
+  "scripts": {
+    "test": "node --test src/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  }
 }

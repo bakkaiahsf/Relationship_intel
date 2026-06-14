@@ -1,49 +1,188 @@
-import { ButtonLink, FeatureCard } from "@accelerator/ui";
+import { ArrowRight, BellRing, Building2, ShieldAlert } from "lucide-react";
+import Link from "next/link";
+import {
+  alertRows,
+  dashboardMetrics,
+  maturityBuckets,
+  portfolioRows
+} from "../lib/mock-data";
+import {
+  MetricCard,
+  PageHeader,
+  Panel,
+  RiskBadge,
+  StatusBadge
+} from "../components/workspace-ui";
 
-const capabilities = [
-  ["Web", "Next.js App Router starter with strict TypeScript."],
-  ["Mobile", "An Expo-ready workspace that can share domain packages."],
-  ["Data", "Supabase migrations, RLS patterns, and provider adapters."],
-  ["Delivery", "Codex skills, test gates, and deployment checklists."]
-] as const;
-
-export default function Home() {
+export default function DashboardPage() {
   return (
-    <main>
-      <section className="hero">
-        <p className="eyebrow">Codex AI Accelerator Kit</p>
-        <h1>From product requirements to a reviewable MVP.</h1>
-        <p className="lede">
-          Replace the PRD, connect only the services you need, and use Codex
-          workflows to build, test, and prepare a deployment.
-        </p>
-        <div className="actions">
-          <ButtonLink href="https://developers.openai.com/codex">
-            Codex documentation
-          </ButtonLink>
-          <ButtonLink href="/api/health" variant="secondary">
-            Health endpoint
-          </ButtonLink>
-        </div>
-      </section>
+    <>
+      <PageHeader
+        eyebrow="Portfolio command center"
+        title="Credit risk overview"
+        description="Exposure, early-warning events, and analyst workload across the monitored NCD portfolio."
+        actions={
+          <>
+            <Link className="button button-secondary" href="/portfolio">
+              View portfolio
+            </Link>
+            <Link className="button" href="/portfolio?import=true">
+              Import portfolio
+            </Link>
+          </>
+        }
+      />
 
-      <section className="grid" aria-label="Accelerator capabilities">
-        {capabilities.map(([title, description]) => (
-          <FeatureCard key={title} title={title}>
-            {description}
-          </FeatureCard>
+      <section className="metric-grid" aria-label="Portfolio metrics">
+        {dashboardMetrics.map((metric) => (
+          <MetricCard key={metric.label} {...metric} />
         ))}
       </section>
 
-      <section className="workflow">
-        <p className="eyebrow">Start here</p>
-        <ol>
-          <li>Replace PRD.md with your product requirements.</li>
-          <li>Review RULES.md and configure .env.local.</li>
-          <li>Ask Codex to build the MVP from the PRD.</li>
-          <li>Run npm run check before a preview deployment.</li>
-        </ol>
+      <section className="dashboard-grid">
+        <Panel
+          title="Exposure by maturity"
+          description="Outstanding principal by remaining tenor"
+          action={<Link href="/ncd-exposures">Open exposures</Link>}
+        >
+          <div className="bar-chart" aria-label="Exposure by maturity bucket">
+            {maturityBuckets.map((bucket) => (
+              <div className="bar-row" key={bucket.label}>
+                <span>{bucket.label}</span>
+                <div className="bar-track">
+                  <div
+                    className={`bar-fill bar-${bucket.tone}`}
+                    style={{ width: `${bucket.percent}%` }}
+                  />
+                </div>
+                <strong>{bucket.value}</strong>
+              </div>
+            ))}
+          </div>
+        </Panel>
+
+        <Panel
+          title="Risk attention"
+          description="Items requiring same-day review"
+          action={<Link href="/alerts">Open queue</Link>}
+        >
+          <div className="attention-list">
+            <div className="attention-item">
+              <span className="icon-box icon-critical">
+                <ShieldAlert aria-hidden="true" size={18} />
+              </span>
+              <div>
+                <strong>₹18.4 Cr critical exposure</strong>
+                <p>2 issuers linked to insolvency or rating-default events.</p>
+              </div>
+            </div>
+            <div className="attention-item">
+              <span className="icon-box icon-high">
+                <BellRing aria-hidden="true" size={18} />
+              </span>
+              <div>
+                <strong>7 alerts breach SLA today</strong>
+                <p>Four alerts remain unassigned across the analyst team.</p>
+              </div>
+            </div>
+            <div className="attention-item">
+              <span className="icon-box icon-neutral">
+                <Building2 aria-hidden="true" size={18} />
+              </span>
+              <div>
+                <strong>14 verifications are stale</strong>
+                <p>GST and MCA evidence is older than the monitoring policy.</p>
+              </div>
+            </div>
+          </div>
+        </Panel>
       </section>
-    </main>
+
+      <Panel
+        title="Priority alerts"
+        description="Sorted by severity, affected exposure, and age"
+        action={
+          <Link className="link-with-icon" href="/alerts">
+            View all <ArrowRight aria-hidden="true" size={15} />
+          </Link>
+        }
+      >
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Severity</th>
+                <th>Counterparty</th>
+                <th>Trigger</th>
+                <th>Exposure</th>
+                <th>Owner</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {alertRows.slice(0, 4).map((alert) => (
+                <tr key={alert.id}>
+                  <td>
+                    <RiskBadge severity={alert.severity} />
+                  </td>
+                  <td>
+                    <Link className="entity-link" href={`/entities/${alert.entityId}`}>
+                      {alert.counterparty}
+                    </Link>
+                    <span className="cell-subtext">{alert.isin}</span>
+                  </td>
+                  <td>{alert.trigger}</td>
+                  <td className="numeric">{alert.exposure}</td>
+                  <td>{alert.owner}</td>
+                  <td>
+                    <StatusBadge status={alert.status} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Panel>
+
+      <Panel
+        title="Largest monitored exposures"
+        description="Issuer exposure with current risk and evidence freshness"
+        action={<Link href="/portfolio">Portfolio register</Link>}
+      >
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Issuer</th>
+                <th>Sector</th>
+                <th>Outstanding</th>
+                <th>Rating</th>
+                <th>Risk</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              {portfolioRows.slice(0, 5).map((row) => (
+                <tr key={row.id}>
+                  <td>
+                    <Link className="entity-link" href={`/entities/${row.entityId}`}>
+                      {row.issuer}
+                    </Link>
+                    <span className="cell-subtext">{row.isin}</span>
+                  </td>
+                  <td>{row.sector}</td>
+                  <td className="numeric">{row.outstanding}</td>
+                  <td>{row.rating}</td>
+                  <td>
+                    <RiskBadge severity={row.risk} />
+                  </td>
+                  <td>{row.evidenceAge}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Panel>
+    </>
   );
 }

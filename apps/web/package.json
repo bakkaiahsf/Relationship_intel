@@ -2,6 +2,7 @@
   "name": "@accelerator/web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,7 +15,11 @@
     "@accelerator/ai": "*",
     "@accelerator/config": "*",
     "@accelerator/db": "*",
+    "@accelerator/notifications": "*",
+    "@accelerator/payments": "*",
     "@accelerator/ui": "*",
+    "@accelerator/verification": "*",
+    "lucide-react": "^1.18.0",
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
